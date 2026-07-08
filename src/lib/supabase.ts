@@ -1,18 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// Hardcoded directly (same approach as the CleanerPlace dashboard) instead of
+// relying on Vercel environment variables. The "anon" / "publishable" key is
+// safe to expose in browser code by design — real access control happens via
+// Row Level Security policies in the database, not by keeping this key secret.
+const SUPABASE_URL = "https://lvwarcylwiixiywkerxt.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2d2FyY3lsd2lpeGl5d2tlcnh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxNTc5NTYsImV4cCI6MjA5ODczMzk1Nn0.VBSlyEysOrSIXO7zu2NbTljGIp6FNlL6WLOvNnTrbdg";
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error(
-    "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY. Copy .env.local.example to .env.local and fill in your Supabase project values."
-  );
-}
-
-// Fall back to a syntactically valid placeholder so the client can always be
-// constructed (e.g. during a build with no env vars yet). Real requests will
-// fail and be caught/logged at the call site instead of crashing at import time.
-export const supabase = createClient(
-  supabaseUrl || "https://placeholder.supabase.co",
-  supabaseAnonKey || "placeholder-anon-key"
-);
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
