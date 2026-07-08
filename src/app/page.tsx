@@ -32,7 +32,7 @@ export default function LoginPage() {
     });
 
     if (signInError) {
-      setError("Incorrect email or password.");
+      setError(`Sign-in failed: ${signInError.message} (status ${signInError.status ?? "n/a"})`);
       setSubmitting(false);
       return;
     }
