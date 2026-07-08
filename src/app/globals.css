@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+:root {
+  --brand-brown: #5a3a2e;
+  --brand-black: #2b2b2b;
+  --brand-cream: #f4eae4;
+  --brand-white: #ffffff;
+  --brand-gold: #c8a27a;
+  --brand-gold-dark: #a9835b;
+  --background: var(--brand-cream);
+  --foreground: var(--brand-black);
+}
+
+@theme inline {
+  --color-brand-brown: var(--brand-brown);
+  --color-brand-black: var(--brand-black);
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-white: var(--brand-white);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-gold-dark: var(--brand-gold-dark);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-poppins);
+  --font-heading: var(--font-playfair);
+  --font-accent: var(--font-montserrat);
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--brand-gold);
+  color: var(--brand-white);
+}
+
+.container-page {
+  width: 100%;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container-page {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
