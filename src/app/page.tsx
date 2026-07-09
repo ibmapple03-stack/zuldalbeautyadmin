@@ -50,7 +50,7 @@ export default function LoginPage() {
     return <div className="flex min-h-screen items-center justify-center bg-brand-cream" />;
   }
 
-  if (session && profile && !isAdmin) {
+  if (session && !isAdmin) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-brand-cream px-6 text-center">
         <Icon name="alertTriangle" className="h-10 w-10 text-red-500" />
