@@ -26,18 +26,24 @@ export default function LoginPage() {
     setError("");
     setSubmitting(true);
 
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
 
-    if (signInError) {
-      setError(`Sign-in failed: ${signInError.message} (status ${signInError.status ?? "n/a"})`);
+      if (signInError) {
+        setError(
+          signInError.message.toLowerCase().includes("invalid login credentials")
+            ? "Incorrect email or password."
+            : signInError.message
+        );
+      }
+    } catch {
+      setError("Couldn't reach the server. Check your connection and try again.");
+    } finally {
       setSubmitting(false);
-      return;
     }
-
-    setSubmitting(false);
   }
 
   if (loading || (session && isAdmin)) {
@@ -84,6 +90,7 @@ export default function LoginPage() {
             <input
               type="email"
               required
+              autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@zuldal.com"
@@ -97,6 +104,7 @@ export default function LoginPage() {
             <input
               type="password"
               required
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
