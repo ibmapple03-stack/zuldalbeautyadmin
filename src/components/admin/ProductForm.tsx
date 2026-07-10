@@ -43,6 +43,22 @@ export default function ProductForm({ product }: { product?: Product }) {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
 
+  const priceNum = Number(price);
+  const costNum = Number(costPrice);
+  const stockNum = Number(stock);
+  const hasValidPricing =
+    costPrice !== "" &&
+    Number.isFinite(priceNum) &&
+    priceNum > 0 &&
+    Number.isFinite(costNum) &&
+    costNum >= 0;
+  const profitPerUnit = hasValidPricing ? priceNum - costNum : null;
+  const marginPct = hasValidPricing ? Math.round(((profitPerUnit as number) / priceNum) * 100) : null;
+  const totalExpectedProfit =
+    hasValidPricing && Number.isFinite(stockNum)
+      ? (profitPerUnit as number) * stockNum
+      : null;
+
   async function handleImageUpload(files: FileList | null) {
     if (!files || files.length === 0) return;
     setUploading(true);
@@ -199,13 +215,6 @@ export default function ProductForm({ product }: { product?: Product }) {
               placeholder="What you pay per unit"
               className={inputClass}
             />
-            {costPrice && price && Number.isFinite(Number(costPrice)) && Number.isFinite(Number(price)) && (
-              <span className="text-xs text-brand-black/50">
-                Profit per unit: {formatNaira(Number(price) - Number(costPrice))}
-                {Number(price) > 0 &&
-                  ` (${Math.round(((Number(price) - Number(costPrice)) / Number(price)) * 100)}% margin)`}
-              </span>
-            )}
           </Field>
           <Field label="Compare-at Price (₦)">
             <input
@@ -245,6 +254,36 @@ export default function ProductForm({ product }: { product?: Product }) {
             <span className="text-brand-black/70">Feature on the storefront homepage</span>
           </label>
         </div>
+      </section>
+
+      <section className="rounded-2xl border border-brand-black/10 bg-brand-white p-6">
+        <h2 className="font-heading text-lg text-brand-black">Expected Profit</h2>
+        {hasValidPricing ? (
+          <div className="mt-4 grid gap-4 sm:grid-cols-3">
+            <div>
+              <p className="text-xs font-accent font-medium text-brand-black/50">Profit per Unit</p>
+              <p className="mt-1 text-lg font-heading text-brand-black">
+                {formatNaira(profitPerUnit as number)}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-accent font-medium text-brand-black/50">Margin</p>
+              <p className="mt-1 text-lg font-heading text-brand-black">{marginPct}%</p>
+            </div>
+            <div>
+              <p className="text-xs font-accent font-medium text-brand-black/50">
+                Total Expected Profit (at {Number.isFinite(stockNum) ? stockNum : 0} in stock)
+              </p>
+              <p className="mt-1 text-lg font-heading text-brand-black">
+                {formatNaira(totalExpectedProfit as number)}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-brand-black/50">
+            Enter a price and a cost price above to see expected profit per unit and for your current stock.
+          </p>
+        )}
       </section>
 
       <section className="rounded-2xl border border-brand-black/10 bg-brand-white p-6">
